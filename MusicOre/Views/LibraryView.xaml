@@ -1,0 +1,22 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="MusicOre.LibraryView"
+	x:Name="UserControl"
+	d:DesignWidth="640" d:DesignHeight="480"
+    DataContext="{Binding Library, Source={StaticResource Locator}}">
+
+	<Grid x:Name="LayoutRoot">
+		<Button Content="Add Foldre" HorizontalAlignment="Left" Height="63" Margin="8,24,0,0" VerticalAlignment="Top" Width="131.5"/>
+		<ListView HorizontalAlignment="Left" Height="304" Margin="159,24,0,0" VerticalAlignment="Top" Width="401">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn/>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
+</UserControl>
