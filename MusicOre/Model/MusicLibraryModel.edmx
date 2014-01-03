@@ -4,11 +4,45 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="MusicLibraryModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="MusicLibraryModelTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="MusicLibraryModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="MusicLibraryModelStoreContainer">
+    <EntitySet Name="RootFoldersSet" EntityType="MusicLibraryModel.Store.RootFoldersSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DevicesSet" EntityType="MusicLibraryModel.Store.DevicesSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="DevicesRootFolders" Association="MusicLibraryModel.Store.DevicesRootFolders">
+      <End Role="Devices" EntitySet="DevicesSet" />
+      <End Role="RootFolders" EntitySet="RootFoldersSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="RootFoldersSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Path" Type="nvarchar" Nullable="false" />
+    <Property Name="LastRefreshed" Type="nvarchar" Nullable="false" />
+    <Property Name="Devices_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DevicesSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" />
+    <Property Name="IsEnabled" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="DevicesRootFolders">
+    <End Role="Devices" Type="MusicLibraryModel.Store.DevicesSet" Multiplicity="1" />
+    <End Role="RootFolders" Type="MusicLibraryModel.Store.RootFoldersSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Devices">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RootFolders">
+        <PropertyRef Name="Devices_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="MusicLibraryModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
@@ -46,13 +80,36 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="MusicLibraryModel" />
-        <Alias Key="Target" Value="MusicLibraryModel.Store" />
-        <EntityContainerMapping CdmEntityContainer="MusicLibraryModelContainer" StorageEntityContainer="MusicLibraryModelTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MusicLibraryModelStoreContainer" CdmEntityContainer="MusicLibraryModelContainer">
+    <EntitySetMapping Name="RootFoldersSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MusicLibraryModel.RootFolders)">
+        <MappingFragment StoreEntitySet="RootFoldersSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+          <ScalarProperty Name="LastRefreshed" ColumnName="LastRefreshed" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DevicesSet">
+      <EntityTypeMapping TypeName="IsTypeOf(MusicLibraryModel.Devices)">
+        <MappingFragment StoreEntitySet="DevicesSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="DevicesRootFolders" TypeName="MusicLibraryModel.DevicesRootFolders" StoreEntitySet="RootFoldersSet">
+      <EndProperty Name="Devices">
+        <ScalarProperty Name="Id" ColumnName="Devices_Id" />
+      </EndProperty>
+      <EndProperty Name="RootFolders">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
