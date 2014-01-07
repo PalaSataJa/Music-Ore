@@ -124,7 +124,11 @@
     </Compile>
     <Compile Include="ViewModel\DirectoryListingViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\PlayerViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\Player.xaml.cs">
+      <DependentUpon>Player.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -140,6 +144,10 @@
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Player.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +190,28 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Snippets\mvvmInpc.snippet" />
+    <None Include="Snippets\mvvmInpcLambda.snippet" />
+    <None Include="Snippets\mvvmInpcLambdaMsg.snippet" />
+    <None Include="Snippets\mvvmInpcMsg.snippet" />
+    <None Include="Snippets\mvvmInpcSet.snippet" />
+    <None Include="Snippets\mvvmInpcSetLambda.snippet" />
+    <None Include="Snippets\mvvmInpcSetLambdaMsg.snippet" />
+    <None Include="Snippets\mvvmInpcSetMsg.snippet" />
+    <None Include="Snippets\mvvmPropA.snippet" />
+    <None Include="Snippets\mvvmPropDP.snippet" />
+    <None Include="Snippets\mvvmRelay.snippet" />
+    <None Include="Snippets\mvvmRelayCanExecute.snippet" />
+    <None Include="Snippets\mvvmRelayGeneric.snippet" />
+    <None Include="Snippets\mvvmRelayGenericCanExecute.snippet" />
+    <None Include="Snippets\mvvmRelayMethod.snippet" />
+    <None Include="Snippets\mvvmRelayMethodCanExecute.snippet" />
+    <None Include="Snippets\mvvmRelayMethodGeneric.snippet" />
+    <None Include="Snippets\mvvmRelayMethodGenericCanExecute.snippet" />
+    <None Include="Snippets\mvvmSLPropA.snippet" />
+    <None Include="Snippets\mvvmSLPropDP.snippet" />
+    <None Include="Snippets\mvvmViewModelLocatorProperty.snippet" />
+    <None Include="Snippets\mvvmVm.snippet" />
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
@@ -190,9 +220,7 @@
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

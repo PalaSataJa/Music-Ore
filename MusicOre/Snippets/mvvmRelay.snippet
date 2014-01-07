@@ -28,7 +28,9 @@
           </Function>
         </Literal>
       </Declarations>
-      <Code Language="csharp"><![CDATA[private RelayCommand $attribute$;
+      <Code Language="csharp">
+				<![CDATA[#region $commandname$
+				private RelayCommand $attribute$;
 
         /// <summary>
         /// Gets the $commandname$.
@@ -44,7 +46,8 @@
                                               $end$
                                           }));
             }
-        }]]></Code>
+        }
+				#endregion $commandname$]]></Code>
     </Snippet>
   </CodeSnippet>
 </CodeSnippets>

@@ -4,8 +4,9 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviours="http://metro.mahapps.com/winfx/xaml/shared"
+        xmlns:views="clr-namespace:MusicOre.Views"
         Title="MainWindow" Height="350" Width="525" GlowBrush="{DynamicResource AccentColorBrush}">
 	<Grid>
-        <Button Content="Blabla" Width="70" Height="20"></Button>
+       <views:Player/>
     </Grid>
 </controls:MetroWindow>

@@ -45,6 +45,7 @@ namespace MusicOre.ViewModel
 
 			SimpleIoc.Default.Register<MainViewModel>();
 			SimpleIoc.Default.Register<DirectoryListingViewModel>();
+			SimpleIoc.Default.Register<PlayerViewModel>();
 		}
 
 		public MainViewModel Main
@@ -61,6 +62,14 @@ namespace MusicOre.ViewModel
 			get
 			{
 				return ServiceLocator.Current.GetInstance<DirectoryListingViewModel>();
+			}
+		}
+
+		public PlayerViewModel Player
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<PlayerViewModel>();
 			}
 		}
 
