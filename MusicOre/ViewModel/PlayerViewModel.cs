@@ -1,6 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Linq;
+using System.Windows;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using MusicOre.Model;
 
 namespace MusicOre.ViewModel
 {
@@ -57,8 +60,8 @@ namespace MusicOre.ViewModel
 			get
 			{
 				return _selectCommand
-						?? (_selectCommand = new RelayCommand(
-																	() => MessengerInstance.Send<DialogMessage>(new DialogMessage(this, "Select File", result => { }))));
+							 ?? (_selectCommand = new RelayCommand(
+								 () => MessengerInstance.Send<DialogMessage>(new DialogMessage(this, "Select File", result => { }))));
 			}
 		}
 		#endregion Select

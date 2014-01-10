@@ -33,6 +33,7 @@ namespace MusicOre.Views
 		private void OpenDialog(DialogMessage obj)
 		{
 			var openFileDialog = new OpenFileDialog();
+			openFileDialog.DefaultExt = "mp3";
 			openFileDialog.Title = obj.Content;
 			bool? showDialog = openFileDialog.ShowDialog();
 			if (showDialog.HasValue && showDialog.Value)
