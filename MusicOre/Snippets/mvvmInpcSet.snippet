@@ -42,11 +42,8 @@
           </Function>
         </Literal>
       </Declarations>
-      <Code Language="csharp"><![CDATA[#region $PropertyName$
-        /// <summary>
-        /// The <see cref="$PropertyName$" /> property's name.
-        /// </summary>
-        public const string $PropertyName$PropertyName = "$PropertyName$";
+      <Code Language="csharp">
+							<![CDATA[#region $PropertyName$
         
         private $Type$ $AttributeName$ = $InitialValue$;
         
@@ -62,9 +59,10 @@
             }
             set
             {
-                Set($PropertyName$PropertyName, ref $AttributeName$, value);
+                Set("$PropertyName$", ref $AttributeName$, value);
             }
         }
+				
         #endregion $PropertyName$]]></Code>
     </Snippet>
   </CodeSnippet>

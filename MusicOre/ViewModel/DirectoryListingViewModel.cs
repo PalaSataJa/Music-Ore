@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 
-namespace MusicOre.ViewModels
+namespace MusicOre.ViewModel
 {
 	public class FileEntry
 	{
 		public string FileName { get; set; }
+		public string Uri { get; set; }
 		public string Artist { get; set; }
 		public string Title { get; set; }
 		public string Album { get; set; }
@@ -20,7 +18,8 @@ namespace MusicOre.ViewModels
 		public static FileEntry Get(string parentPath, string filename)
 		{
 			//todo: get id3 info
-			return new FileEntry{FileName = filename};
+
+			return new FileEntry { FileName = filename, Uri = parentPath + @"\" + filename };
 		}
 	}
 

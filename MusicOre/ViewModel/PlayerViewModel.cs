@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -9,6 +10,7 @@ namespace MusicOre.ViewModel
 {
 	public class PlayerViewModel : ViewModelBase
 	{
+		private Playlist playlist;
 		public static object Token;
 
 		public PlayerViewModel()
@@ -20,6 +22,50 @@ namespace MusicOre.ViewModel
 		{
 			PlayUri = message.Content;
 		}
+
+		#region UpNext
+
+		private ObservableCollection<FileEntry> _upNext = new ObservableCollection<FileEntry>();
+
+		/// <summary>
+		/// Sets and gets the UpNext property.
+		/// Changes to that property's value raise the PropertyChanged event. 
+		/// </summary>
+		public ObservableCollection<FileEntry> UpNext
+		{
+			get
+			{
+				return _upNext;
+			}
+			set
+			{
+				Set("UpNext", ref _upNext, value);
+			}
+		}
+
+		#endregion UpNext
+
+		#region PlayList
+
+		private ObservableCollection<FileEntry> _playlistEntries = new ObservableCollection<FileEntry>();
+
+		/// <summary>
+		/// Sets and gets the PlayList property.
+		/// Changes to that property's value raise the PropertyChanged event. 
+		/// </summary>
+		public ObservableCollection<FileEntry> PlayList
+		{
+			get
+			{
+				return _playlistEntries;
+			}
+			set
+			{
+				Set("PlayList", ref _playlistEntries, value);
+			}
+		}
+
+		#endregion PlayList
 
 		#region PlayUri
 
@@ -48,6 +94,50 @@ namespace MusicOre.ViewModel
 		}
 
 		#endregion
+
+		#region Previous
+		private RelayCommand previous;
+
+		/// <summary>
+		/// Gets the Next.
+		/// </summary>
+		public RelayCommand Previous
+		{
+			get
+			{
+				return previous
+						?? (previous = new RelayCommand(
+																	() =>
+																	{
+																		playlist.Previous();
+																		PlayUri = playlist.Current.Uri;
+																		UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
+																	}));
+			}
+		}
+		#endregion Previous
+
+		#region Next
+		private RelayCommand nextCommand;
+
+		/// <summary>
+		/// Gets the Next.
+		/// </summary>
+		public RelayCommand Next
+		{
+			get
+			{
+				return nextCommand
+						?? (nextCommand = new RelayCommand(
+																	() =>
+																	{
+																		playlist.Next();
+																		PlayUri = playlist.Current.Uri;
+																		UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
+																	}));
+			}
+		}
+		#endregion Next
 
 		#region Select
 		private RelayCommand _selectCommand;
