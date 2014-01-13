@@ -4,7 +4,7 @@
       <vm:ViewModelLocator xmlns:vm="clr-namespace:MusicOre"
                            x:Key="Locator" />
   </Application.Resources>
-  
+
   In the View:
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 
@@ -12,7 +12,6 @@
   See http://www.galasoft.ch/mvvm
 */
 
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
@@ -44,6 +43,7 @@ namespace MusicOre.ViewModel
 
 			SimpleIoc.Default.Register<MainViewModel>();
 			SimpleIoc.Default.Register<DirectoryListingViewModel>();
+			SimpleIoc.Default.Register<ManageLibraryViewModel>();
 			SimpleIoc.Default.Register<PlayerViewModel>();
 		}
 
@@ -53,7 +53,14 @@ namespace MusicOre.ViewModel
 			{
 				return ServiceLocator.Current.GetInstance<MainViewModel>();
 			}
+		}
 
+		public ManageLibraryViewModel ManageLibrary
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<ManageLibraryViewModel>();
+			}
 		}
 
 		public DirectoryListingViewModel DirectoryListing

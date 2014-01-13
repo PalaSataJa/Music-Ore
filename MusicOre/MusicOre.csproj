@@ -66,11 +66,23 @@
     <Reference Include="GalaSoft.MvvmLight.WPF45">
       <HintPath>packages\MvvmLightLibs.4.2.30.0\lib\net45\GalaSoft.MvvmLight.WPF45.dll</HintPath>
     </Reference>
+    <Reference Include="Id3">
+      <HintPath>packages\ID3.0.3.0\lib\net40\Id3.dll</HintPath>
+    </Reference>
+    <Reference Include="Id3.Files">
+      <HintPath>packages\ID3.Files.0.3.0\lib\net40\Id3.Files.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>packages\MahApps.Metro.0.11.0.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack">
+      <HintPath>packages\Windows7APICodePack-Core.1.1.0.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>packages\Windows7APICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -103,20 +115,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Migrations\201401101428529_InitialCreate.cs" />
-    <Compile Include="Migrations\201401101428529_InitialCreate.Designer.cs">
-      <DependentUpon>201401101428529_InitialCreate.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\FileSystemOperations.cs" />
     <Compile Include="Model\LibraryContext.cs" />
     <Compile Include="ViewModel\DirectoryListingViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ManageLibraryViewModel.cs" />
     <Compile Include="ViewModel\PlayerViewModel.cs" />
     <Compile Include="ViewModel\Playlist.cs" />
+    <Compile Include="ViewModel\StringEditViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\DialogCloser.cs" />
+    <Compile Include="Views\ManageLibrary.xaml.cs">
+      <DependentUpon>ManageLibrary.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StringEditBox.xaml.cs">
+      <DependentUpon>StringEditBox.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -134,9 +152,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\ManageLibrary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Player.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StringEditBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -153,9 +179,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201401101428529_InitialCreate.resx">
-      <DependentUpon>201401101428529_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

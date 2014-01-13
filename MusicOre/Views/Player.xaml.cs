@@ -27,7 +27,6 @@ namespace MusicOre.Views
 		{
 			InitializeComponent();
 			Messenger.Default.Register<PropertyChangedMessage<string>>(this, UriChanged);
-			Messenger.Default.Register<DialogMessage>(this, OpenDialog);
 		}
 
 		private void OpenDialog(DialogMessage obj)

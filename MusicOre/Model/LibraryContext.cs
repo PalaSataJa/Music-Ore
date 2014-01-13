@@ -11,6 +11,8 @@ namespace MusicOre.Model
 	{
 		public DbSet<Device> Devices { get; set; }
 		public DbSet<RootFolder> RootFolders { get; set; }
+		public DbSet<MediaEntry> MediaEntries { get; set; }
+		public DbSet<RootFolderPath> RootFolderPaths { get; set; }
 
 	}
 }

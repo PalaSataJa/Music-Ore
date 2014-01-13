@@ -10,6 +10,6 @@
                       Height="350"
                       GlowBrush="{DynamicResource AccentColorBrush}">
 	<Grid>
-		<views:Player />
+		<views:ManageLibrary />
 	</Grid>
 </controls:MetroWindow>
