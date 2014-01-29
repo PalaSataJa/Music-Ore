@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
-using HW.WpfControls.DAL;
 
 namespace HW.WpfControls.ViewModel
 {
@@ -169,7 +168,7 @@ namespace HW.WpfControls.ViewModel
 
 		private void ExecuteSaveCommand()
 		{
-			SimpleIoc.Default.GetInstance<ISettingsProvider>().SavePdsConnectionString(Text);
+			//SimpleIoc.Default.GetInstance<ISettingsProvider>().SavePdsConnectionString(Text);
 			DialogResult = true;
 		}
 

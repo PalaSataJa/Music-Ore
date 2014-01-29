@@ -151,7 +151,7 @@ namespace MusicOre.ViewModel
 			{
 				return _selectCommand
 							 ?? (_selectCommand = new RelayCommand(
-								 () => MessengerInstance.Send<DialogMessage>(new DialogMessage(this, "Select File", result => { }))));
+								 () => so));
 			}
 		}
 		#endregion Select

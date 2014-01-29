@@ -8,5 +8,10 @@
 	<Grid>
 		<Button Width="70" Height="20" Content="Select" Command="{Binding Select}"></Button>
 		<MediaElement x:Name="MediaElement" Width="0" Height="0" LoadedBehavior="Manual" UnloadedBehavior="Stop" ></MediaElement>
-	</Grid>
+        <StackPanel Height="50" Orientation="Horizontal" Margin="60,188,-60,62">
+            <Button Content="Previous" Command="{Binding Previous}"/>
+            <Button Content="Play" />
+            <Button Content="Next" Command="{Binding Next}"/>
+        </StackPanel>
+    </Grid>
 </UserControl>

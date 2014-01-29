@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
-using HW.WpfControls.DAL;
 using MahApps.Metro;
 
 namespace HW.WpfControls.Dialogs
@@ -19,10 +18,8 @@ namespace HW.WpfControls.Dialogs
 
 		void StringEditBox_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
-			if (SimpleIoc.Default.GetInstance<ISettingsProvider>().ColorTheme == ColorTheme.Dark)
-			{
 				ThemeManager.ChangeTheme(Window.GetWindow(this), ThemeManager.DefaultAccents.First(a => a.Name == "Blue"), Theme.Dark);
-			}
+			
 		}
 	}
 }
