@@ -14,5 +14,17 @@ namespace MusicOre.Model
 		public DbSet<MediaEntry> MediaEntries { get; set; }
 		public DbSet<RootFolderPath> RootFolderPaths { get; set; }
 
+		public static void CleanAllData()
+		{
+			using (var context = new LibraryContext())
+			{
+				context.MediaEntries.RemoveRange(context.MediaEntries);
+				context.RootFolders.RemoveRange(context.RootFolders);
+				context.RootFolderPaths.RemoveRange(context.RootFolderPaths);
+				context.Devices.RemoveRange(context.Devices);
+				context.SaveChanges();
+			}
+		}
+
 	}
 }

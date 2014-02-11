@@ -27,25 +27,23 @@ namespace MusicOre.Views
 		{
 			InitializeComponent();
 			Messenger.Default.Register<PropertyChangedMessage<string>>(this, UriChanged);
+			Messenger.Default.Register<MediaMessage>(this, PlayPause);
 		}
 
-		private void OpenDialog(DialogMessage obj)
+		private bool state = false;
+
+		private void PlayPause(MediaMessage obj)
 		{
-			var openFileDialog = new OpenFileDialog();
-			openFileDialog.DefaultExt = "mp3";
-			openFileDialog.Title = obj.Content;
-			bool? showDialog = openFileDialog.ShowDialog();
-			if (showDialog.HasValue && showDialog.Value)
-			{
-				Messenger.Default.Send(new GenericMessage<string>(openFileDialog.FileName),PlayerViewModel.Token);
-			}
+			if (state)
+				MediaElement.Pause();
+			else
+				MediaElement.Play();
 		}
-
-
+		
 		private void UriChanged(PropertyChangedMessage<string> message)
 		{
 			MediaElement.Stop();
-			MediaElement.Source = new Uri(message.NewValue,UriKind.RelativeOrAbsolute);
+			MediaElement.Source = new Uri(message.NewValue, UriKind.RelativeOrAbsolute);
 			MediaElement.Play();
 		}
 	}

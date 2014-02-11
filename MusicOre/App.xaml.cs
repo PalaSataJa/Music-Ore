@@ -20,7 +20,8 @@ namespace MusicOre
 			AppDomain.CurrentDomain.SetData("DataDirectory", ConfigurationManager.AppSettings["LibraryPath"]);
 
 			Database.SetInitializer(new MigrateDatabaseToLatestVersion<LibraryContext, Migrations.Configuration>());
-            
+
+			FileSystemOperations.UpdateLibrary();
 		}
 	}
 }

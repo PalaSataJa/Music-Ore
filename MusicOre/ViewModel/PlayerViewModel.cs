@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -8,6 +9,10 @@ using MusicOre.Model;
 
 namespace MusicOre.ViewModel
 {
+	public class MediaMessage: MessageBase
+	{
+		
+	}
 	public class PlayerViewModel : ViewModelBase
 	{
 		private Playlist playlist;
@@ -139,6 +144,23 @@ namespace MusicOre.ViewModel
 		}
 		#endregion Next
 
+		#region Play
+		private RelayCommand playCommand;
+
+		/// <summary>
+		/// Gets the Next.
+		/// </summary>
+		public RelayCommand Play
+		{
+			get
+			{
+				return playCommand
+						?? (playCommand = new RelayCommand(
+																	() => MessengerInstance.Send(new MediaMessage())));
+			}
+		}
+		#endregion Next
+
 		#region Select
 		private RelayCommand _selectCommand;
 
@@ -151,7 +173,7 @@ namespace MusicOre.ViewModel
 			{
 				return _selectCommand
 							 ?? (_selectCommand = new RelayCommand(
-								 () => so));
+								 () => { }));
 			}
 		}
 		#endregion Select

@@ -22,6 +22,15 @@ namespace MusicOre.Model
 		public string RelativeFolderPath { get; set; }
 
 		public RootFolder RootFolder { get; set; }
+
+		public override bool Equals(object obj)
+		{
+			var entry = obj as MediaEntry;
+			if (entry == null)
+				return false;
+			return this.Extension == entry.Extension && this.Filename == entry.Filename &&
+			       this.RelativeFolderPath == entry.RelativeFolderPath && this.RootFolder == entry.RootFolder;
+		}
 	}
 
 	public class RootFolder

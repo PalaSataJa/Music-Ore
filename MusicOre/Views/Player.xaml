@@ -10,7 +10,7 @@
 		<MediaElement x:Name="MediaElement" Width="0" Height="0" LoadedBehavior="Manual" UnloadedBehavior="Stop" ></MediaElement>
         <StackPanel Height="50" Orientation="Horizontal" Margin="60,188,-60,62">
             <Button Content="Previous" Command="{Binding Previous}"/>
-            <Button Content="Play" />
+            <Button Content="Play" Command="{Binding Play}"/>
             <Button Content="Next" Command="{Binding Next}"/>
         </StackPanel>
     </Grid>
