@@ -1,26 +1,26 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicOre.Model;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MusicOre.ViewModel
 {
+	public class FileEndedMessage : MessageBase { }
+
 	public class PlayerViewModel : ViewModelBase
 	{
-		private Playlist playlist;
 		public static object Token;
-
+		private Playlist playlist;
 		public PlayerViewModel()
 		{
 			MessengerInstance.Register<GenericMessage<string>>(this, PlayerViewModel.Token, FilesSelected);
+			MessengerInstance.Register<FileEndedMessage>(this, PlayerViewModel.Token, message => GoNext());
 		}
 
 		private void FilesSelected(GenericMessage<string> message)
 		{
-			PlayUri = message.Content;
+			//CurrentMedia = message.Content;
 		}
 
 		#region UpNext
@@ -29,7 +29,7 @@ namespace MusicOre.ViewModel
 
 		/// <summary>
 		/// Sets and gets the UpNext property.
-		/// Changes to that property's value raise the PropertyChanged event. 
+		/// Changes to that property's value raise the PropertyChanged event.
 		/// </summary>
 		public ObservableCollection<FileEntry> UpNext
 		{
@@ -51,7 +51,7 @@ namespace MusicOre.ViewModel
 
 		/// <summary>
 		/// Sets and gets the PlayList property.
-		/// Changes to that property's value raise the PropertyChanged event. 
+		/// Changes to that property's value raise the PropertyChanged event.
 		/// </summary>
 		public ObservableCollection<FileEntry> PlayList
 		{
@@ -67,35 +67,36 @@ namespace MusicOre.ViewModel
 
 		#endregion PlayList
 
-		#region PlayUri
+		#region CurrentMedia
 
 		/// <summary>
-		/// The <see cref="PlayUri" /> property's name.
+		/// The <see cref="CurrentMedia" /> property's name.
 		/// </summary>
-		public const string PlayUriPropertyName = "PlayUri";
+		public const string CurrentMediaPropertyName = "CurrentMedia";
 
-		private string _playUri = null;
+		private FileEntry _currentMedia = null;
 
 		/// <summary>
 		/// Sets and gets the PlayUri property.
 		/// Changes to that property's value raise the PropertyChanged event.
 		/// This property's value is broadcasted by the MessengerInstance when it changes.
 		/// </summary>
-		public string PlayUri
+		public FileEntry CurrentMedia
 		{
 			get
 			{
-				return _playUri;
+				return _currentMedia;
 			}
 			set
 			{
-				Set(() => PlayUri, ref _playUri, value, true);
+				Set(() => CurrentMedia, ref _currentMedia, value, true);
 			}
 		}
 
-		#endregion
+		#endregion CurrentMedia
 
 		#region Previous
+
 		private RelayCommand previous;
 
 		/// <summary>
@@ -106,18 +107,20 @@ namespace MusicOre.ViewModel
 			get
 			{
 				return previous
-						?? (previous = new RelayCommand(
-																	() =>
-																	{
-																		playlist.Previous();
-																		PlayUri = playlist.Current.Uri;
-																		UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
-																	}));
+								?? (previous = new RelayCommand(
+																														() =>
+																														{
+																															playlist.Previous();
+																															CurrentMedia = playlist.Current;
+																															UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
+																														}));
 			}
 		}
+
 		#endregion Previous
 
 		#region Next
+
 		private RelayCommand nextCommand;
 
 		/// <summary>
@@ -128,32 +131,42 @@ namespace MusicOre.ViewModel
 			get
 			{
 				return nextCommand
-						?? (nextCommand = new RelayCommand(
-																	() =>
-																	{
-																		playlist.Next();
-																		PlayUri = playlist.Current.Uri;
-																		UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
-																	}));
+								?? (nextCommand = new RelayCommand(
+																														GoNext));
 			}
 		}
+
+		private void GoNext()
+		{
+			playlist.Next();
+			CurrentMedia = playlist.Current;
+			UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
+		}
+
 		#endregion Next
 
-		#region Select
-		private RelayCommand _selectCommand;
+		#region PlayAll
+
+		private RelayCommand _playAllCommand;
 
 		/// <summary>
 		/// Gets the Select.
 		/// </summary>
-		public RelayCommand Select
+		public RelayCommand PlayAll
 		{
 			get
 			{
-				return _selectCommand
-							 ?? (_selectCommand = new RelayCommand(
-								 () => so));
+				return _playAllCommand
+										 ?? (_playAllCommand = new RelayCommand(
+														 () =>
+														 {
+															 playlist = new Playlist();
+															 playlist.AllMusic();
+															 CurrentMedia = playlist.Current;
+														 }));
 			}
 		}
-		#endregion Select
+
+		#endregion PlayAll
 	}
 }

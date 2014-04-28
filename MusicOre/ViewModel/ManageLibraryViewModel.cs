@@ -19,47 +19,9 @@ namespace MusicOre.ViewModel
 
 		private void FolderSelected(GenericMessage<string> message)
 		{
-			var directoryInfo = new DirectoryInfo(message.Content);
-			//todo async
-			using (var context = new LibraryContext())
-			{
-				var device = context.Devices.FirstOrDefault(d => d.Name.Equals(Environment.MachineName));
-				var rootFolder = context.RootFolders.FirstOrDefault(f => f.Name.Equals(directoryInfo.Name));
-				if (rootFolder == null)
-				{
-					rootFolder = new RootFolder { Name = directoryInfo.Name };
-				}
-				if (device == null)
-				{
-					device = FileSystemOperations.AddCurrentDevice(context);
-				}
-				var rootFolderPath = new RootFolderPath
-				{
-					Device = device,
-					RootFolder = rootFolder,
-					Path = directoryInfo.FullName
-				};
-				context.RootFolderPaths.Add(rootFolderPath);
-
-
-				var FileEntries =
-					Directory.GetFiles(message.Content,"*", SearchOption.AllDirectories)
-						.Select(filename => new FileInfo(filename))
-						.Select(
-							fileInfo =>
-								new MediaEntry
-								{
-									Filename = fileInfo.Name.Replace(fileInfo.Extension,""),
-									Extension = fileInfo.Extension,
-									RootFolder = rootFolder,
-									RelativeFolderPath = fileInfo.DirectoryName.Replace(directoryInfo.FullName, "")
-								});
-				context.MediaEntries.AddRange(FileEntries);
-
-				context.SaveChanges();
-				//todo add id3 task
-			}
+			LibraryOperations.ScanDirectory(message.Content);
 		}
+
 
 		#region AddFolder	Command
 

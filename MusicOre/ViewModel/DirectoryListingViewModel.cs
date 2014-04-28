@@ -1,8 +1,11 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using MusicOre.Model;
+using MusicOre.ViewModel;
 
 namespace MusicOre.ViewModel
 {
@@ -21,6 +24,20 @@ namespace MusicOre.ViewModel
 
 			return new FileEntry { FileName = filename, Uri = parentPath + @"\" + filename };
 		}
+
+		public FileEntry()
+		{
+
+		}
+
+		public static FileEntry Get(MediaEntry media)
+		{
+			return new FileEntry
+			{
+				 FileName = media.Filename, Uri = media.GetPathOnCurrentDevice()
+			};
+		}
+}
 	}
 
 	public class DirectoryEntry
@@ -99,4 +116,4 @@ namespace MusicOre.ViewModel
 		}
 
 	}
-}
+

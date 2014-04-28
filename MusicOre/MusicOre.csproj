@@ -117,11 +117,15 @@
     </ApplicationDefinition>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Device.cs" />
-    <Compile Include="Model\FileSystemOperations.cs" />
+    <Compile Include="Model\LibraryOperations.cs" />
     <Compile Include="Model\LibraryContext.cs" />
+    <Compile Include="Model\MediaEntry.cs" />
+    <Compile Include="Model\RootFolder.cs" />
+    <Compile Include="Model\RootFolderPath.cs" />
     <Compile Include="ViewModel\DirectoryListingViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ManageLibraryViewModel.cs" />
+    <Compile Include="ViewModel\MyExtensions.cs" />
     <Compile Include="ViewModel\PlayerViewModel.cs" />
     <Compile Include="ViewModel\Playlist.cs" />
     <Compile Include="ViewModel\StringEditViewModel.cs" />
