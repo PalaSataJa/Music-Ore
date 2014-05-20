@@ -2,7 +2,7 @@
 
 namespace MusicOre.Model
 {
-	public class RootFolder
+	public class Root
 	{
 		public int Id { get; set; }
 
@@ -10,7 +10,7 @@ namespace MusicOre.Model
 
 		public string Name { get; set; }
 
-		public virtual List<RootFolderPath> PathsOnDevices { get; set; }
+		public virtual List<DevicePath> DevicePaths { get; set; }
 
 		public virtual List<MediaEntry> MediaEntries { get; set; }
 

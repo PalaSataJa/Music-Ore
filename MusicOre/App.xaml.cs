@@ -20,8 +20,8 @@ namespace MusicOre
 			AppDomain.CurrentDomain.SetData("DataDirectory", ConfigurationManager.AppSettings["LibraryPath"]);
 
 			Database.SetInitializer(new MigrateDatabaseToLatestVersion<LibraryContext, Migrations.Configuration>());
-			
-			LibraryOperations.ScanDirectory(@"D:\MegaSync\Music");
+
+			LibraryOperations.ScanDirectory(@"D:\Personal\MegaSync\Music","MegaMusic");
 			LibraryOperations.CurrentDeviceMediaEntries.ToList();
 		}
 	}

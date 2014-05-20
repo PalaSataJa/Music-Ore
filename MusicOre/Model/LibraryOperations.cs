@@ -22,8 +22,8 @@ namespace MusicOre.Model
 
 		public static string GetPathOnCurrentDevice(this MediaEntry media)
 		{
-			return media.RootFolder.PathsOnDevices.First(d => d.Device.Name == Environment.MachineName).Path + @"\" +
-						 media.RelativeFolderPath + @"\" +
+			return media.Root.DevicePaths.First(d => d.Device.Name == Environment.MachineName).Path + @"\" +
+						 media.RelativePath + @"\" +
 						 media.Filename + media.Extension;
 		}
 
@@ -32,66 +32,6 @@ namespace MusicOre.Model
 			using (var context = new LibraryContext())
 			{
 				return InitCurrentDevice(context);
-			}
-		}
-
-		public static void ScanDirectory(string dirName)
-		{
-			var directoryInfo = new DirectoryInfo(dirName);
-			//todo async
-			using (var context = new LibraryContext())
-			{
-				var device = InitCurrentDevice(context);
-				RootFolder rootFolder;
-				if (context.RootFolders.FirstOrDefault(f => f.Name.Equals(directoryInfo.Name)) != null)
-					rootFolder = context.RootFolders.FirstOrDefault(f => f.Name.Equals(directoryInfo.Name));
-				else rootFolder = new RootFolder { Name = directoryInfo.Name, MediaEntries = new List<MediaEntry>() };
-
-				var rootFolderPath = new RootFolderPath
-				{
-					Device = device,
-					RootFolder = rootFolder,
-					Path = directoryInfo.FullName
-				};
-				RootFolderPath firstOrDefault = context.RootFolderPaths.Any() ? context.RootFolderPaths.FirstOrDefault(rf => rf.Device.Name == Environment.MachineName && rf.RootFolder.Name == directoryInfo.Name) : null;
-				if (firstOrDefault != null)
-				{
-					firstOrDefault.Path = directoryInfo.FullName;
-				}
-				else
-				{
-					context.RootFolderPaths.Add(rootFolderPath);
-				}
-
-				var FileEntries =
-						Directory.GetFiles(dirName, "*", SearchOption.AllDirectories)
-								.Select(filename => new FileInfo(filename))
-								.Where(fileInfo => ValidExtensions.Contains(fileInfo.Extension))
-								.Select(
-										fileInfo =>
-												new MediaEntry
-												{
-													Filename =
-															!string.IsNullOrEmpty(fileInfo.Extension) ? fileInfo.Name.Replace(fileInfo.Extension, "") : fileInfo.Name,
-													Extension = fileInfo.Extension,
-													RootFolder = rootFolder,
-													RelativeFolderPath = fileInfo.DirectoryName.Replace(directoryInfo.FullName, "")
-												});
-				foreach (var mediaEntry in FileEntries)
-				{
-					var existing = rootFolder.MediaEntries.FirstOrDefault(e => e.Equals(mediaEntry));
-					if (existing != null)
-					{
-						existing.Update(mediaEntry);
-					}
-					else
-					{
-						rootFolder.MediaEntries.Add(mediaEntry);
-					}
-				}
-
-				context.SaveChanges();
-				//todo add id3 task
 			}
 		}
 
@@ -111,7 +51,7 @@ namespace MusicOre.Model
 				InitCurrentDevice(context);
 
 				var dev = context.Devices.First(d => d.Name == Environment.MachineName);
-				var rf = dev.RootFolderPaths.Select(f => f.RootFolder).ToList();
+				var rf = dev.DevicePaths.Select(f => f.Root).ToList();
 				return rf.SelectMany(f => f.MediaEntries)
 				.ToList().Select(FileEntry.Get).ToList();
 			}
@@ -119,12 +59,74 @@ namespace MusicOre.Model
 
 		private static Device InitCurrentDevice(LibraryContext context)
 		{
-			var device = context.Devices.FirstOrDefault(d => d.Name.Equals(Environment.MachineName));
-			if (device == null)
+			return context.Devices.FirstOrDefault(d => d.Name.Equals(Environment.MachineName)) ?? AddCurrentDevice(context);	
+		}
+
+		internal static void ScanDirectory(string directoryPath, string rootName)
+		{
+			var directoryInfo = new DirectoryInfo(directoryPath);
+			var updateQueue = new Dictionary<string, MediaEntry>();
+			using (var context = new LibraryContext())
 			{
-				device = LibraryOperations.AddCurrentDevice(context);
+				var device = InitCurrentDevice(context);
+
+				var root = context.Roots.FirstOrDefault(r => r.Name == rootName) ?? new Root();
+
+				DevicePath path;
+				//todo assuming now that no duplicated roots will be added
+
+				if (root.DevicePaths.FirstOrDefault(p => p.Device == device) != null)
+					path = root.DevicePaths.FirstOrDefault(p => p.Device == device);
+				else
+				{
+					path = new DevicePath { Device = device };
+					root.DevicePaths.Add(path);
+				}
+
+				//todo for now fileEntry is considered to be added to one root only
+				var fileEntries =
+					Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories)
+						.Select(filename => new FileInfo(filename))
+						.Where(fileInfo => ValidExtensions.Contains(fileInfo.Extension))
+						.Select(
+							fileInfo =>
+								new
+								{
+									MediaEntry =
+										new MediaEntry
+										{
+											Filename =
+												!string.IsNullOrEmpty(fileInfo.Extension) ? fileInfo.Name.Replace(fileInfo.Extension, "") : fileInfo.Name,
+											Extension = fileInfo.Extension,
+											Root = root,
+											RelativePath = fileInfo.DirectoryName.Replace(directoryInfo.FullName, "")
+										},
+									FilePath = fileInfo.FullName
+								});
+
+				foreach (var fileEntry in fileEntries)
+				{
+					var existing = root.MediaEntries.FirstOrDefault(me => me.Equals(fileEntry.MediaEntry));
+					fileEntry.MediaEntry.ComputeMd5(fileEntry.FilePath);
+					if (existing == null)
+					{
+						root.MediaEntries.Add(fileEntry.MediaEntry);
+						updateQueue.Add(fileEntry.FilePath, fileEntry.MediaEntry);
+					}
+					else
+					{
+						if (existing.Md5 != fileEntry.MediaEntry.Md5)
+						{
+							updateQueue.Add(fileEntry.FilePath, existing);
+						}
+					}
+				}
+
+				context.SaveChanges();
 			}
-			return device;
+
+
+			updateQueue.ForceId3Update();
 		}
 	}
 }
