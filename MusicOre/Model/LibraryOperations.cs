@@ -1,4 +1,5 @@
-﻿using MusicOre.ViewModel;
+﻿using System.Collections.ObjectModel;
+using MusicOre.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,29 +60,39 @@ namespace MusicOre.Model
 
 		private static Device InitCurrentDevice(LibraryContext context)
 		{
-			return context.Devices.FirstOrDefault(d => d.Name.Equals(Environment.MachineName)) ?? AddCurrentDevice(context);	
+			return context.Devices.FirstOrDefault(d => d.Name.Equals(Environment.MachineName)) ?? AddCurrentDevice(context);
 		}
 
 		internal static void ScanDirectory(string directoryPath, string rootName)
 		{
 			var directoryInfo = new DirectoryInfo(directoryPath);
-			var updateQueue = new Dictionary<string, MediaEntry>();
+			var updateQueue = new List<MediaEntry>();
 			using (var context = new LibraryContext())
 			{
 				var device = InitCurrentDevice(context);
+				context.Devices.Add(device);
 
-				var root = context.Roots.FirstOrDefault(r => r.Name == rootName) ?? new Root();
-
-				DevicePath path;
-				//todo assuming now that no duplicated roots will be added
-
-				if (root.DevicePaths.FirstOrDefault(p => p.Device == device) != null)
-					path = root.DevicePaths.FirstOrDefault(p => p.Device == device);
+				Root root = context.Roots.FirstOrDefault(r => r.Name == rootName);
+				if (root != null)
+				{
+					DevicePath path = root.DevicePaths.FirstOrDefault(p => p.Device == device);
+					if (path != null)
+					{
+						if (!path.Path.Equals(directoryPath, StringComparison.InvariantCultureIgnoreCase))
+						{
+							throw new ArgumentException("Path conflicts with existing");
+						}
+					}
+					else
+					{
+						root.DevicePaths.Add(new DevicePath { Path = directoryPath, Device = device});
+					}
+				}
 				else
 				{
-					path = new DevicePath { Device = device };
-					root.DevicePaths.Add(path);
+					root = new Root { Name = rootName,MediaEntries = new Collection<MediaEntry>(), DevicePaths = new Collection<DevicePath> { new DevicePath { Path = directoryPath, Device = device} } };
 				}
+				
 
 				//todo for now fileEntry is considered to be added to one root only
 				var fileEntries =
@@ -99,7 +110,9 @@ namespace MusicOre.Model
 												!string.IsNullOrEmpty(fileInfo.Extension) ? fileInfo.Name.Replace(fileInfo.Extension, "") : fileInfo.Name,
 											Extension = fileInfo.Extension,
 											Root = root,
-											RelativePath = fileInfo.DirectoryName.Replace(directoryInfo.FullName, "")
+											RelativePath = fileInfo.DirectoryName.Replace(directoryInfo.FullName, ""),
+											FullPath = fileInfo.FullName,
+											LastUpdateDate = fileInfo.LastWriteTimeUtc > fileInfo.CreationTimeUtc ? fileInfo.LastWriteTimeUtc : fileInfo.CreationTimeUtc
 										},
 									FilePath = fileInfo.FullName
 								});
@@ -107,17 +120,16 @@ namespace MusicOre.Model
 				foreach (var fileEntry in fileEntries)
 				{
 					var existing = root.MediaEntries.FirstOrDefault(me => me.Equals(fileEntry.MediaEntry));
-					fileEntry.MediaEntry.ComputeMd5(fileEntry.FilePath);
 					if (existing == null)
 					{
 						root.MediaEntries.Add(fileEntry.MediaEntry);
-						updateQueue.Add(fileEntry.FilePath, fileEntry.MediaEntry);
+						updateQueue.Add(fileEntry.MediaEntry);
 					}
 					else
 					{
-						if (existing.Md5 != fileEntry.MediaEntry.Md5)
+						if (existing.LastUpdateDate != fileEntry.MediaEntry.LastUpdateDate)
 						{
-							updateQueue.Add(fileEntry.FilePath, existing);
+							updateQueue.Add(existing);
 						}
 					}
 				}
@@ -126,7 +138,7 @@ namespace MusicOre.Model
 			}
 
 
-			updateQueue.ForceId3Update();
+			//updateQueue.ForceId3Update();
 		}
 	}
 }

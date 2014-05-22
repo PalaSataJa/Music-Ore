@@ -19,7 +19,7 @@ namespace MusicOre.ViewModel
 
 		private void FolderSelected(GenericMessage<string> message)
 		{
-			LibraryOperations.ScanDirectory(message.Content);
+			//LibraryOperations.ScanDirectory(message.Content);
 		}
 
 

@@ -2,7 +2,7 @@
 {
 	public class DevicePath
 	{
-		public Device Device { get; set; }
+		public virtual Device Device { get; set; }
 		public int DeviceId { get; set; }
 
 		public int Id { get; set; }

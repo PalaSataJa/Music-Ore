@@ -19,10 +19,15 @@ namespace MusicOre.Model
 
 		public int Id { get; set; }
 
+		public DateTime LastUpdateDate { get; set; }
+
 		[Index]
 		public string Md5 { get; set; }
 
 		public string RelativePath { get; set; }
+
+		[NotMapped]
+		public string FullPath { get; set; }
 
 		public Root Root { get; set; }
 

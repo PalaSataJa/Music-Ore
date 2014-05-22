@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MusicOre.Model
 {
@@ -10,9 +11,9 @@ namespace MusicOre.Model
 
 		public string Name { get; set; }
 
-		public virtual List<DevicePath> DevicePaths { get; set; }
+		public virtual ICollection<DevicePath> DevicePaths { get; set; }
 
-		public virtual List<MediaEntry> MediaEntries { get; set; }
+		public virtual ICollection<MediaEntry> MediaEntries { get; set; }
 
 	}
 }

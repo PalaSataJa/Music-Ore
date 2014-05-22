@@ -1,5 +1,4 @@
-﻿using Id3;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,22 +23,21 @@ namespace MusicOre.Model
 			mediaEntry.Md5 = sBuilder.ToString();
 		}
 
-		public static void ForceId3Update(this Dictionary<string, MediaEntry> queue)
+		public static void ForceId3Update(this List<MediaEntry> queue)
 		{
 			//todo async
 			using (var context = new LibraryContext())
 			{
 				foreach (var entry in queue)
 				{
-					using (var mp3 = new Mp3File(entry.Key))
-					{
-						Id3Tag tag = mp3.GetTag(Id3TagFamily.FileStartTag);
-						entry.Value.Artist = tag.Artists.Value;
-						entry.Value.Album = tag.Album.Value;
-						entry.Value.Title = tag.Title.Value;
-						entry.Value.Genre = tag.Genre.Value;
-						entry.Value.BeatsPerMinute = tag.BeatsPerMinute.Value;
-					}
+
+					var tag = TagLib.File.Create(entry.FullPath).Tag;
+					entry.Artist = tag.FirstPerformer;
+					entry.Album = tag.Album;
+					entry.Title = tag.Title;
+					entry.Genre = tag.FirstGenre;
+					entry.BeatsPerMinute = tag.BeatsPerMinute.ToString();
+
 				}
 				context.SaveChanges();
 			}

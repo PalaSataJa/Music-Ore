@@ -9,6 +9,6 @@ namespace MusicOre.Model
 
 		public string Name { get; set; }
 
-		public virtual List<DevicePath> DevicePaths { get; set; }
+		public virtual ICollection<DevicePath> DevicePaths { get; set; }
 	}
 }
