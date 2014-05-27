@@ -23,7 +23,7 @@ namespace MusicOre.Model
 
 		public static string GetPathOnCurrentDevice(this MediaEntry media)
 		{
-			return media.Root.DevicePaths.First(d => d.Device.Name == Environment.MachineName).Path + @"\" +
+			return media.Root.DevicePaths.First(d => d.Device.Name == Environment.MachineName).Path +
 						 media.RelativePath + @"\" +
 						 media.Filename + media.Extension;
 		}
@@ -41,7 +41,6 @@ namespace MusicOre.Model
 			Device entity = new Device { Name = System.Environment.MachineName };
 
 			context.Devices.Add(entity);
-			context.SaveChanges();
 			return entity;
 		}
 
@@ -70,7 +69,6 @@ namespace MusicOre.Model
 			using (var context = new LibraryContext())
 			{
 				var device = InitCurrentDevice(context);
-				context.Devices.Add(device);
 
 				Root root = context.Roots.FirstOrDefault(r => r.Name == rootName);
 				if (root != null)
@@ -85,12 +83,15 @@ namespace MusicOre.Model
 					}
 					else
 					{
-						root.DevicePaths.Add(new DevicePath { Path = directoryPath, Device = device});
+						DevicePath devicePath = new DevicePath { Path = directoryPath, Device = device};
+						root.DevicePaths.Add(devicePath);
+						//context.DevicePaths.Add(devicePath);
 					}
 				}
 				else
 				{
 					root = new Root { Name = rootName,MediaEntries = new Collection<MediaEntry>(), DevicePaths = new Collection<DevicePath> { new DevicePath { Path = directoryPath, Device = device} } };
+					context.Roots.Add(root);
 				}
 				
 
@@ -127,6 +128,7 @@ namespace MusicOre.Model
 					}
 					else
 					{
+						existing.FullPath = existing.GetPathOnCurrentDevice();
 						if (existing.LastUpdateDate != fileEntry.MediaEntry.LastUpdateDate)
 						{
 							updateQueue.Add(existing);
@@ -138,7 +140,7 @@ namespace MusicOre.Model
 			}
 
 
-			//updateQueue.ForceId3Update();
+			updateQueue.ForceId3Update();
 		}
 	}
 }

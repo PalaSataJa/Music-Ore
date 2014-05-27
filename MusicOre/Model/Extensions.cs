@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -38,6 +39,8 @@ namespace MusicOre.Model
 					entry.Genre = tag.FirstGenre;
 					entry.BeatsPerMinute = tag.BeatsPerMinute.ToString();
 
+					context.MediaEntries.Attach(entry);
+					context.Entry(entry).State = EntityState.Modified;
 				}
 				context.SaveChanges();
 			}
