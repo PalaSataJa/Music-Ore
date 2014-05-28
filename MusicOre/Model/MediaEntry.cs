@@ -1,8 +1,19 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicOre.Model
 {
+	public enum Rating 
+	{
+		Crap = -1,
+		Dunno = 0,
+		Tired = 1,
+		Filler = 2,
+		Okay = 3,
+		Nice = 4,
+		SuchWow = 5
+	}
 	public class MediaEntry
 	{
 		public string Album { get; set; }
@@ -21,6 +32,13 @@ namespace MusicOre.Model
 
 		public DateTime LastUpdateDate { get; set; }
 
+		public DateTime? LastRated { get; set; }
+
+		public Rating Rating { get; set; }
+
+		[MaxLength]
+		public byte[] CoverPicture { get; set; }
+
 		[Index]
 		public string Md5 { get; set; }
 
@@ -34,6 +52,15 @@ namespace MusicOre.Model
 		public int RootFolderId { get; set; }
 
 		public string Title { get; set; }
+
+		public Int64 DurationTicks { get; set; }
+
+		[NotMapped]
+		public TimeSpan Duration
+		{
+			get { return TimeSpan.FromTicks(DurationTicks); }
+			set { DurationTicks = value.Ticks; }
+		}
 
 		public bool Equals(MediaEntry other)
 		{

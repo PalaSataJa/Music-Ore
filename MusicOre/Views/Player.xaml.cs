@@ -35,6 +35,7 @@ namespace MusicOre.Views
 			this.progressTimer.Interval = TimeSpan.FromSeconds(1);
 			this.progressTimer.Tick += progressTimer_Tick;
 			this.progressTimer.Start();
+			PositionBlock.Text = "";
 			ProgressBar.Maximum = MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
 		}
 
@@ -52,15 +53,15 @@ namespace MusicOre.Views
 
 		private void PlayPauseClick(object sender, RoutedEventArgs e)
 		{
-			if ((string)(sender as Button).Content == "Play")
+			if ((string)(sender as Button).ToolTip == "Pause")
 			{
 				MediaElement.Pause();
-				(sender as Button).Content = "Pause";
+				(sender as Button).ToolTip = "Play";
 			}
 			else
 			{
 				MediaElement.Play();
-				(sender as Button).Content = "Play";
+				(sender as Button).ToolTip = "Pause";
 			}
 		}
 
@@ -82,8 +83,9 @@ namespace MusicOre.Views
 		private void UpdateProgress()
 		{
 			ProgressBar.Value = MediaElement.Position.TotalSeconds;
-			ProgressBar.ToolTip = string.Format("{0}:{1}", MediaElement.Position.Minutes.ToString("00"),
-					MediaElement.Position.Seconds.ToString("00"));
+			var toolTip = string.Format("{0}:{1}", MediaElement.Position.Minutes.ToString("00"),
+				MediaElement.Position.Seconds.ToString("00"));
+			ProgressBar.ToolTip = toolTip;
 		}
 		private void UriChanged(PropertyChangedMessage<FileEntry> message)
 		{

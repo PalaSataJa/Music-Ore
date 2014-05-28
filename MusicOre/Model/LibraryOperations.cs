@@ -52,8 +52,10 @@ namespace MusicOre.Model
 
 				var dev = context.Devices.First(d => d.Name == Environment.MachineName);
 				var rf = dev.DevicePaths.Select(f => f.Root).ToList();
-				return rf.SelectMany(f => f.MediaEntries)
-				.ToList().Select(FileEntry.Get).ToList();
+				var entries = rf.SelectMany(f => f.MediaEntries)
+					.ToList();
+				entries.ForEach(me => me.FullPath = me.GetPathOnCurrentDevice());
+				return entries.Select(FileEntry.Get).ToList();
 			}
 		}
 
@@ -129,7 +131,7 @@ namespace MusicOre.Model
 					else
 					{
 						existing.FullPath = existing.GetPathOnCurrentDevice();
-						if (existing.LastUpdateDate != fileEntry.MediaEntry.LastUpdateDate)
+						if (!existing.LastUpdateDate.CloseEnough(fileEntry.MediaEntry.LastUpdateDate))
 						{
 							updateQueue.Add(existing);
 						}

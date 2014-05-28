@@ -16,7 +16,7 @@ namespace MusicOre.ViewModel
 		public string Artist { get; set; }
 		public string Title { get; set; }
 		public string Album { get; set; }
-		public DateTime Duration { get; set; }
+		public TimeSpan Duration { get; set; }
 
 		public static FileEntry Get(string parentPath, string filename)
 		{
@@ -34,7 +34,7 @@ namespace MusicOre.ViewModel
 		{
 			return new FileEntry
 			{
-				 FileName = media.Filename, Uri = media.GetPathOnCurrentDevice()
+				 FileName = media.Filename, Uri = media.FullPath, Album = media.Album, Artist = media.Artist, Title = media.Title, Duration = media.Duration
 			};
 		}
 }

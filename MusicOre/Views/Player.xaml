@@ -7,25 +7,59 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+			<local:MathConverter x:Key="MathConverter"/>
+		</ResourceDictionary>
     </UserControl.Resources>
     <UserControl.DataContext>
         <Binding Path="Player" Source="{StaticResource Locator}"/>
     </UserControl.DataContext>
-    <Grid>
-        <StackPanel Margin="0,0,159,191">
-            <TextBlock Text="{Binding CurrentMedia.FileName}"/> 
-            <TextBlock x:Name="PositionBlock"/>
-            <ProgressBar x:Name="ProgressBar" MouseLeftButtonDown="ProgressBar_OnMouseLeftButtonDown"></ProgressBar>
-            <StackPanel> <TextBlock>Volume</TextBlock><Slider Maximum="1" SmallChange="1" Value="{Binding Volume, ElementName=MediaElement, Mode=TwoWay}"></Slider></StackPanel>
-           
-        </StackPanel>
-        <Button Width="70" Height="20" Content="Play All" Command="{Binding PlayAll}"/>
-        <MediaElement x:Name="MediaElement" Width="0" Height="0" LoadedBehavior="Manual" UnloadedBehavior="Stop" />
-        <StackPanel Height="50" Orientation="Horizontal" Margin="60,188,-60,62">
-            <Button Content="Previous" Command="{Binding Previous}"/>
-            <Button Content="Play"  Click="PlayPauseClick"/>
-            <Button Content="Next" Command="{Binding Next}"/>
-        </StackPanel>
-    </Grid>
+    <StackPanel Margin="0" Orientation="Vertical">
+		<Grid Height="252.667" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118.583" > 
+			<Grid Width="100" Height="100" Background="White" Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+			<TextBlock Text="{Binding CurrentMedia.Artist}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentMedia.Artist}" Typography.Capitals="AllSmallCaps" FontFamily="/MusicOre;component/Resources/#Exo" FontWeight="Bold" FontSize="21.333" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			<TextBlock Text="{Binding CurrentMedia.Album}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentMedia.Album}"  Typography.Capitals="AllSmallCaps"  FontFamily="/MusicOre;component/Resources/#Exo" Margin="0,23,0,-23" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			<TextBlock Text="{Binding CurrentMedia.Title}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentMedia.Title}" Margin="0,178,0,0" FontFamily="/MusicOre;component/Resources/#Exo" FontSize="18.667" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			<TextBlock x:Name="PositionBlock" Text="{Binding ToolTip, ElementName=ProgressBar}" Margin="0,163.5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="/MusicOre;component/Resources/#Exo" FontSize="10.667"/>
+			<ProgressBar x:Name="ProgressBar" MouseLeftButtonDown="ProgressBar_OnMouseLeftButtonDown" Height="3" Margin="0,155.5,0,0" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			<Slider Maximum="1" SmallChange="1" Value="{Binding Volume, ElementName=MediaElement, Mode=TwoWay}" Orientation="Vertical" Margin="99.367,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="108.5"/>
+			<MediaElement x:Name="MediaElement" Width="0" Height="0" LoadedBehavior="Manual" UnloadedBehavior="Stop" />
+			<StackPanel Margin="0,202.992,0,0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Button x:Name="button" Command="{Binding Previous}" Margin="-3" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" VerticalAlignment="Center">
+					<Rectangle Width="{Binding Width, ConverterParameter=@VALUE/2, Converter={StaticResource MathConverter}, ElementName=button}" Height="{Binding Width, ConverterParameter=@VALUE/2, Converter={StaticResource MathConverter}, ElementName=button}" Margin="0,0,4,0" >
+						<Rectangle.Fill>
+							<VisualBrush Stretch="Fill"
+								Visual="{StaticResource appbar_control_rewind_variant}" />
+						</Rectangle.Fill>
+					</Rectangle>
+				</Button>
+				<Button x:Name="button1" Click="PlayPauseClick" Width="50" ToolTip="Play" Height="50" Margin="-3" Style="{DynamicResource MetroCircleButtonStyle}" VerticalAlignment="Center">
+					<Rectangle Width="{Binding Width, ConverterParameter=@VALUE/2, Converter={StaticResource MathConverter}, ElementName=button1}" Height="{Binding Width, ConverterParameter=@VALUE/2, Converter={StaticResource MathConverter}, ElementName=button1}" Margin="4,0,0,0" >
+						<Rectangle.Fill>
+							<VisualBrush Stretch="Fill"
+								Visual="{StaticResource appbar_control_resume}" />
+						</Rectangle.Fill>
+					</Rectangle>
+				</Button>
+				<Button Command="{Binding Next}" Margin="-3" Width="40" Height="40"  Style="{DynamicResource MetroCircleButtonStyle}" VerticalAlignment="Center">
+					<Rectangle Width="{Binding Width, ConverterParameter=@VALUE/2, Converter={StaticResource MathConverter}, ElementName=button}" Height="{Binding Width, ConverterParameter=@VALUE/2, Converter={StaticResource MathConverter}, ElementName=button}" Margin="4,0,0,0" >
+						<Rectangle.Fill>
+							<VisualBrush Stretch="Fill"
+								Visual="{StaticResource appbar_control_fastforward_variant}" />
+						</Rectangle.Fill>
+					</Rectangle>
+				</Button>
+			</StackPanel>
+		</Grid>
+		<Expander Header="Advanced" Margin="0">
+			<Grid >
+				<Button Width="70" Height="20" Content="Play All" Command="{Binding PlayAll}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+			</Grid>
+		</Expander>
+	</StackPanel>
 </UserControl>

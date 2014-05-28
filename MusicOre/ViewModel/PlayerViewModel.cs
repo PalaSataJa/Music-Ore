@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Ploeh.AutoFixture;
 
 namespace MusicOre.ViewModel
 {
@@ -16,6 +17,10 @@ namespace MusicOre.ViewModel
 		{
 			MessengerInstance.Register<GenericMessage<string>>(this, PlayerViewModel.Token, FilesSelected);
 			MessengerInstance.Register<FileEndedMessage>(this, PlayerViewModel.Token, message => GoNext());
+			if (IsInDesignMode)
+			{
+				CurrentMedia = new Fixture().Create<FileEntry>();
+			}
 		}
 
 		private void FilesSelected(GenericMessage<string> message)

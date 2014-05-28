@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Security.Cryptography;
@@ -9,6 +10,15 @@ namespace MusicOre.Model
 	public static class Extensions
 	{
 		public static MD5 HashGen = MD5.Create();
+
+		public static bool CloseEnough(this DateTime thisTime, DateTime thatTime)
+		{
+			if (Math.Abs((thatTime - thisTime).TotalSeconds) < 1)
+			{
+				return true;
+			}
+			return false;
+		}
 
 		public static void ComputeMd5(this MediaEntry mediaEntry, string filePath)
 		{
@@ -32,12 +42,13 @@ namespace MusicOre.Model
 				foreach (var entry in queue)
 				{
 
-					var tag = TagLib.File.Create(entry.FullPath).Tag;
-					entry.Artist = tag.FirstPerformer;
-					entry.Album = tag.Album;
-					entry.Title = tag.Title;
-					entry.Genre = tag.FirstGenre;
-					entry.BeatsPerMinute = tag.BeatsPerMinute.ToString();
+					var tag = TagLib.File.Create(entry.FullPath);
+					entry.Artist = tag.Tag.FirstPerformer;
+					entry.Album = tag.Tag.Album;
+					entry.Title = tag.Tag.Title;
+					entry.Genre = tag.Tag.FirstGenre;
+					entry.BeatsPerMinute = tag.Properties.AudioBitrate.ToString();
+					entry.Duration = tag.Properties.Duration;
 
 					context.MediaEntries.Attach(entry);
 					context.Entry(entry).State = EntityState.Modified;
