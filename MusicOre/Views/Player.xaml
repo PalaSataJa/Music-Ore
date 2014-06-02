@@ -6,21 +6,21 @@
              xmlns:local="clr-namespace:MusicOre.Views" x:Class="MusicOre.Views.Player" 
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
+	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				
-                <ResourceDictionary Source="/Resources/Icons.xaml" />
+
+				<ResourceDictionary Source="/Resources/Icons.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
 			<local:MathConverter x:Key="MathConverter"/>
 		</ResourceDictionary>
-    </UserControl.Resources>
-    <UserControl.DataContext>
-        <Binding Path="Player" Source="{StaticResource Locator}"/>
-    </UserControl.DataContext>
-    <StackPanel Margin="0" Orientation="Vertical">
-		<Grid Height="252.667" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118.583" > 
+	</UserControl.Resources>
+	<UserControl.DataContext>
+		<Binding Path="Player" Source="{StaticResource Locator}"/>
+	</UserControl.DataContext>
+	<StackPanel Margin="0" Orientation="Vertical">
+		<Grid Height="281" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" >
 			<Grid Width="100" Height="100" Background="White" Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
 			<TextBlock Text="{Binding CurrentMedia.Artist}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentMedia.Artist}" Typography.Capitals="AllSmallCaps" FontFamily="/MusicOre;component/Resources/#Exo" FontWeight="Bold" FontSize="21.333" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 			<TextBlock Text="{Binding CurrentMedia.Album}" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentMedia.Album}"  Typography.Capitals="AllSmallCaps"  FontFamily="/MusicOre;component/Resources/#Exo" Margin="0,23,0,-23" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -55,6 +55,7 @@
 					</Rectangle>
 				</Button>
 			</StackPanel>
+			<local:RatingSelector Margin="0,253,0,0" SelectedRating="{Binding CurrentMedia.Rating}"></local:RatingSelector>
 		</Grid>
 		<Expander Header="Advanced" Margin="0">
 			<Grid >

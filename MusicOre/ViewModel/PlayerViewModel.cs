@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections.ObjectModel;
 using System.Linq;
+using MusicOre.Model;
 using Ploeh.AutoFixture;
 
 namespace MusicOre.ViewModel
@@ -19,7 +20,7 @@ namespace MusicOre.ViewModel
 			MessengerInstance.Register<FileEndedMessage>(this, PlayerViewModel.Token, message => GoNext());
 			if (IsInDesignMode)
 			{
-				CurrentMedia = new Fixture().Create<FileEntry>();
+				CurrentMedia = new Fixture().Create<MediaEntry>();
 			}
 		}
 
@@ -30,13 +31,13 @@ namespace MusicOre.ViewModel
 
 		#region UpNext
 
-		private ObservableCollection<FileEntry> _upNext = new ObservableCollection<FileEntry>();
+		private ObservableCollection<MediaEntry> _upNext = new ObservableCollection<MediaEntry>();
 
 		/// <summary>
 		/// Sets and gets the UpNext property.
 		/// Changes to that property's value raise the PropertyChanged event.
 		/// </summary>
-		public ObservableCollection<FileEntry> UpNext
+		public ObservableCollection<MediaEntry> UpNext
 		{
 			get
 			{
@@ -52,13 +53,13 @@ namespace MusicOre.ViewModel
 
 		#region PlayList
 
-		private ObservableCollection<FileEntry> _playlistEntries = new ObservableCollection<FileEntry>();
+		private ObservableCollection<MediaEntry> _playlistEntries = new ObservableCollection<MediaEntry>();
 
 		/// <summary>
 		/// Sets and gets the PlayList property.
 		/// Changes to that property's value raise the PropertyChanged event.
 		/// </summary>
-		public ObservableCollection<FileEntry> PlayList
+		public ObservableCollection<MediaEntry> PlayList
 		{
 			get
 			{
@@ -79,14 +80,14 @@ namespace MusicOre.ViewModel
 		/// </summary>
 		public const string CurrentMediaPropertyName = "CurrentMedia";
 
-		private FileEntry _currentMedia = null;
+		private MediaEntry _currentMedia = null;
 
 		/// <summary>
 		/// Sets and gets the PlayUri property.
 		/// Changes to that property's value raise the PropertyChanged event.
 		/// This property's value is broadcasted by the MessengerInstance when it changes.
 		/// </summary>
-		public FileEntry CurrentMedia
+		public MediaEntry CurrentMedia
 		{
 			get
 			{
@@ -117,7 +118,7 @@ namespace MusicOre.ViewModel
 																														{
 																															playlist.Previous();
 																															CurrentMedia = playlist.Current;
-																															UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
+																															UpNext = new ObservableCollection<MediaEntry>(playlist.UpNext.Take(5).ToList());
 																														}));
 			}
 		}
@@ -145,7 +146,7 @@ namespace MusicOre.ViewModel
 		{
 			playlist.Next();
 			CurrentMedia = playlist.Current;
-			UpNext = new ObservableCollection<FileEntry>(playlist.UpNext.Take(5).ToList());
+			UpNext = new ObservableCollection<MediaEntry>(playlist.UpNext.Take(5).ToList());
 		}
 
 		#endregion Next

@@ -21,7 +21,7 @@ namespace MusicOre
 
 			Database.SetInitializer(new MigrateDatabaseToLatestVersion<LibraryContext, Migrations.Configuration>());
 
-			LibraryOperations.ScanDirectory(@"D:\Personal\MegaSync\Music","MegaMusic");
+			//LibraryOperations.ScanDirectory(@"D:\Personal\MegaSync\Music","MegaMusic");
 			LibraryOperations.CurrentDeviceMediaEntries.ToList();
 		}
 	}

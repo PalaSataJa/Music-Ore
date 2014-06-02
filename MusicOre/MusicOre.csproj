@@ -154,6 +154,9 @@
     <Compile Include="Views\StringEditBox.xaml.cs">
       <DependentUpon>StringEditBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RatingSelector.xaml.cs">
+      <DependentUpon>RatingSelector.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -185,6 +188,10 @@
     <Page Include="Views\StringEditBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RatingSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

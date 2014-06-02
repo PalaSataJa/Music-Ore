@@ -7,9 +7,9 @@ namespace MusicOre.ViewModel
 {
     public class Playlist : ObservableObject
     {
-        private readonly List<FileEntry> Entries = new List<FileEntry>();
+        private readonly List<MediaEntry> Entries = new List<MediaEntry>();
 
-        private List<FileEntry> NowPlaying = new List<FileEntry>();
+        private List<MediaEntry> NowPlaying = new List<MediaEntry>();
 
         private bool shuffle;
 
@@ -18,7 +18,7 @@ namespace MusicOre.ViewModel
             Shuffle = true;
         }
 
-        public FileEntry Current
+				public MediaEntry Current
         {
             get { return this[Index]; }
         }
@@ -35,17 +35,17 @@ namespace MusicOre.ViewModel
             }
         }
 
-        public IEnumerable<FileEntry> UpNext
+        public IEnumerable<MediaEntry> UpNext
         {
             get { return NowPlaying.SkipWhile((entry, i) => i <= Index); }
         }
 
-        public FileEntry this[int index]
+        public MediaEntry this[int index]
         {
             get { return NowPlaying[index]; }
         }
 
-        public void Add(FileEntry fileEntry)
+				public void Add(MediaEntry fileEntry)
         {
             Entries.Add(fileEntry);
             DoShuffle();
@@ -70,7 +70,7 @@ namespace MusicOre.ViewModel
             }
         }
 
-        public void PlayNow(FileEntry fileEntry)
+				public void PlayNow(MediaEntry fileEntry)
         {
             Index = NowPlaying.IndexOf(fileEntry);
         }
@@ -87,7 +87,7 @@ namespace MusicOre.ViewModel
             }
         }
 
-        public void Remove(FileEntry fileEntry)
+				public void Remove(MediaEntry fileEntry)
         {
             Entries.Remove(fileEntry);
             DoShuffle();
@@ -97,7 +97,7 @@ namespace MusicOre.ViewModel
         {
             if (Entries.Count == 0)
                 return;
-            FileEntry current = null;
+						MediaEntry current = null;
             if (NowPlaying.Count != 0)
             {
                 current = NowPlaying[Index];

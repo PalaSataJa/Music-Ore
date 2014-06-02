@@ -11,9 +11,9 @@ namespace MusicOre.Model
 	{
 		public static List<string> ValidExtensions = new List<string> { ".mp3", ".wav", ".ogg", ".m4a" };
 
-		private static List<FileEntry> _currentEntries;
+		private static List<MediaEntry> _currentEntries;
 
-		public static List<FileEntry> CurrentDeviceMediaEntries
+		public static List<MediaEntry> CurrentDeviceMediaEntries
 		{
 			get
 			{
@@ -44,7 +44,7 @@ namespace MusicOre.Model
 			return entity;
 		}
 
-		private static List<FileEntry> GetAllMedia()
+		private static List<MediaEntry> GetAllMedia()
 		{
 			using (var context = new LibraryContext())
 			{
@@ -55,7 +55,7 @@ namespace MusicOre.Model
 				var entries = rf.SelectMany(f => f.MediaEntries)
 					.ToList();
 				entries.ForEach(me => me.FullPath = me.GetPathOnCurrentDevice());
-				return entries.Select(FileEntry.Get).ToList();
+				return entries.ToList();
 			}
 		}
 

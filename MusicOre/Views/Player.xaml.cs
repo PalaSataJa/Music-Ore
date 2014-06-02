@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Win32;
+using MusicOre.Model;
 using MusicOre.ViewModel;
 using System;
 using System.Windows;
@@ -19,7 +20,7 @@ namespace MusicOre.Views
 		public Player()
 		{
 			InitializeComponent();
-			Messenger.Default.Register<PropertyChangedMessage<FileEntry>>(this, UriChanged);
+			Messenger.Default.Register<PropertyChangedMessage<MediaEntry>>(this, UriChanged);
 			MediaElement.MediaEnded += MediaElement_MediaEnded;
 			MediaElement.MediaOpened += MediaElement_MediaOpened;
 		}
@@ -87,10 +88,10 @@ namespace MusicOre.Views
 				MediaElement.Position.Seconds.ToString("00"));
 			ProgressBar.ToolTip = toolTip;
 		}
-		private void UriChanged(PropertyChangedMessage<FileEntry> message)
+		private void UriChanged(PropertyChangedMessage<MediaEntry> message)
 		{
 			MediaElement.Stop();
-			MediaElement.Source = new Uri(message.NewValue.Uri, UriKind.RelativeOrAbsolute);
+			MediaElement.Source = new Uri(message.NewValue.FullPath, UriKind.RelativeOrAbsolute);
 			MediaElement.Play();
 		}
 	}
