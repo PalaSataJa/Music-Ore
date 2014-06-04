@@ -131,6 +131,7 @@
     <Compile Include="Model\LibraryOperations.cs" />
     <Compile Include="Model\LibraryContext.cs" />
     <Compile Include="Model\MediaEntry.cs" />
+    <Compile Include="Model\Rating.cs" />
     <Compile Include="Model\Root.cs" />
     <Compile Include="Model\DevicePath.cs" />
     <Compile Include="Resources\Example.xaml.cs">

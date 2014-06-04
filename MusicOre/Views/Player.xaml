@@ -55,7 +55,7 @@
 					</Rectangle>
 				</Button>
 			</StackPanel>
-			<local:RatingSelector Margin="0,253,0,0" SelectedRating="{Binding CurrentMedia.Rating}"></local:RatingSelector>
+			<local:RatingSelector Margin="0,253,0,0" ></local:RatingSelector>
 		</Grid>
 		<Expander Header="Advanced" Margin="0">
 			<Grid >

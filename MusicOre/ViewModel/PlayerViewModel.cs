@@ -10,6 +10,16 @@ namespace MusicOre.ViewModel
 {
 	public class FileEndedMessage : MessageBase { }
 
+	public class RatingSelectedMessage : MessageBase
+	{
+		public RatingSelectedMessage( Rating newRating)
+		{
+			this.NewRating = newRating;
+		}
+
+		public readonly Rating NewRating;
+	}
+
 	public class PlayerViewModel : ViewModelBase
 	{
 		public static object Token;
@@ -18,9 +28,18 @@ namespace MusicOre.ViewModel
 		{
 			MessengerInstance.Register<GenericMessage<string>>(this, PlayerViewModel.Token, FilesSelected);
 			MessengerInstance.Register<FileEndedMessage>(this, PlayerViewModel.Token, message => GoNext());
+			MessengerInstance.Register<RatingSelectedMessage>(this, PlayerViewModel.Token, UpdateRating);
 			if (IsInDesignMode)
 			{
 				CurrentMedia = new Fixture().Create<MediaEntry>();
+			}
+		}
+
+		private void UpdateRating(RatingSelectedMessage message)
+		{
+			if (message.NewRating != CurrentMedia.Rating)
+			{
+				CurrentMedia.UpdateRating(message.NewRating);
 			}
 		}
 

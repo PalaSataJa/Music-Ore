@@ -144,5 +144,17 @@ namespace MusicOre.Model
 
 			updateQueue.ForceId3Update();
 		}
+
+		public static void UpdateRating(this MediaEntry entry,Rating newRating)
+		{
+			using (var context = new LibraryContext())
+			{
+				context.MediaEntries.Attach(entry);
+				entry.Rating = new Rating();
+				entry.LastRated = DateTime.Now;
+				context.SaveChanges();
+			}
+			
+		}
 	}
 }

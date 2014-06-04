@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 using MusicOre.Model;
+using MusicOre.ViewModel;
 
 namespace MusicOre.Views
 {
@@ -24,7 +26,6 @@ namespace MusicOre.Views
 		public RatingSelector()
 		{
 			InitializeComponent();
-			//(this.Content as FrameworkElement).DataContext = this; 
 			this.Loaded += RatingSelector_Loaded;
 		}
 
@@ -32,20 +33,16 @@ namespace MusicOre.Views
 		{
 			ComboBox.ItemsSource = Enum.GetValues(typeof(Rating)).Cast<Rating>();
 		}
-
-		public static readonly DependencyProperty SelectedRatingProperty = DependencyProperty.Register(
-			"SelectedRating", typeof (Rating), typeof (RatingSelector), new PropertyMetadata(Rating.Dunno));
-		
-		public Rating SelectedRating
-		{
-			get { return (Rating) GetValue(SelectedRatingProperty); }
-			set { SetValue(SelectedRatingProperty, value); }
-		}
-
 		private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (e.RemovedItems.Count == 0)
+			{
+				//first load - todo resolve
+				return;
+			}
 			var rating = (Rating)e.AddedItems[0];
-			SelectedRating = rating;
+
+			Messenger.Default.Send(new RatingSelectedMessage(rating), PlayerViewModel.Token);
 		}
 	}
 }
